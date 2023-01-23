@@ -40,14 +40,35 @@
 
 /* cuando seleccionamos asi ( sin espacios ) hacemos referencia a un elemento que cuenta con ambas clases */
 .tw-followCard-btnFollow.is-following {
-      border: 1px solid red;
+      border: 1px solid #bbb;
+      background: transparent;
+      color: #fff;
+      width: 140px;
       
 }
 
 .tw-followCard-btnFollow:hover {
-      background-color: #09f;
+      opacity: .8;
 }
 
 .tw-followCard-btnFollow.is-following:hover {
-      background: red;
+      background-color: rgba(255, 102, 102, 0.25);
+      color: red;
+      border: 1px solid red;
+}
+
+.tw-followCard-btnFollow.is-following:hover .tw-followCard-unFollow {
+      display: block;
+}
+
+.tw-followCard-btnText {
+      display: block;
+}
+
+.tw-followCard-btnFollow.is-following:hover .tw-followCard-btnText {
+      display: none;
+}
+
+.tw-followCard-unFollow {
+      display: none;
 }

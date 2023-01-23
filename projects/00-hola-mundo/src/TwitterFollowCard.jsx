@@ -2,11 +2,13 @@ import './TwitterFollowCard.css'
 import { useState } from 'react' //importamos el Hook
 
 
-export function TwitterFollowCard ({ formatUsername ,userName, children}) {
+export function TwitterFollowCard ({ formatUsername ,userName, children, initialIsFolowing}) {
       // tambien podemos pasar funciones como props (formatUsername)
 
 
-      const [ isFollowing, setIsFollowing] = useState(false)
+      const [ isFollowing, setIsFollowing] = useState(initialIsFolowing)
+      // el estado inicial tambien puede recibirse como una prop
+      // recordar que el estado solo se inicializa una sola vez
 
 
 
@@ -39,7 +41,10 @@ export function TwitterFollowCard ({ formatUsername ,userName, children}) {
                         {/* aqui le damos el condicional a la clase para que sea dinamico y elija el estilo dependiendo el estado de la prop */}
                         <button 
                         className={btnFollowClassName}
-                        onClick={handleClick}> {text} </button>
+                        onClick={handleClick}> 
+                        <span className='tw-followCard-btnText'>{text} </span>
+                        <span className='tw-followCard-unFollow'> Dejar de seguir </span>
+                        </button>
                   </aside>
             </article>
       )
