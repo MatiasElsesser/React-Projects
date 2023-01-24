@@ -1,6 +1,28 @@
 import { TwitterFollowCard } from './TwitterFollowCard'
 import {useState} from "react"
 
+
+const users = [
+      {
+            userName: 'matielsesser',
+            name: 'Matias Elsesser',
+            isFollowing: true
+      },
+      {
+            userName: 'GiuliElsesser',
+            name: 'Giuliana Elsesser',
+            isFollowing: false
+      },
+      {
+            userName: 'elonmusk',
+            name: 'Elon Musk',
+            isFollowing: false
+      }
+]
+
+
+
+
 export function App () {
       const format = (userName) => `@ ${userName}`
 
@@ -34,6 +56,24 @@ export function App () {
                         formatUsername={format}>
                               El Pepito
                         </TwitterFollowCard>
+
+                        {
+                              users.map( ( user ) => {
+                                    {/* desestructuramos  para obtener mas facil los valores de los objetos*/}
+                                    const { userName, name, isFollowing } = user
+                                    return (
+                                          <TwitterFollowCard 
+                                          // la Key es un identificador unico que nos va  a pedir al momento de renderizar listas, para asi poder identificar cada elemento por separado en el VirtualDom. Siempre asegurarse de darle un valor unico, que no se repita
+                                          key={userName}
+                                          userName={userName}
+                                          isFollowing={isFollowing}
+                                          formatUsername={format}>
+                                                {name}
+                                          </TwitterFollowCard>
+                                    )
+                              })
+                        }
+                        {/* De la manera anterior podemos renderizar listas de objetos, al fin y al cabo sigue siendo javascript */}
 
                         <button onClick={ () => setName("midudev") }>
                               Cambio de nombre
