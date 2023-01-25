@@ -38,7 +38,23 @@ body {
 
 .board h1 {
   color: #eee;
-  margin-bottom: 16px;
+  text-shadow: 0 0 15px #fff;
+  margin-bottom: 36px;
+  animation-name: textTransform;
+  animation-duration: 2s;
+animation-iteration-count: infinite;
+}
+
+@keyframes textTransform {
+  0% {
+    text-shadow: 0 0 15px #fff;
+  }
+  50% {
+    text-shadow: 0 0 35px #fff;
+  }
+  100% {
+    text-shadow: 0 0 15px #fff;
+  }
 }
 
 .board button {
