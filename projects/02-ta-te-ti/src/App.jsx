@@ -57,6 +57,13 @@ function App() {
 		return null
 	}
 
+	const resetGame = () => {
+		setBoard(Array(9).fill(null))
+		setTurn(TURNS.X)
+		setWinner(null)
+	}
+
+
 	const updateBoard = ( index ) => {
 		if (board[index] || winner) return // si ya tiene algo no acrualizamos la posicion
 
@@ -81,6 +88,7 @@ function App() {
 	return (  
 		<main className="board">
 			<h1>Ta te ti</h1>
+			<button onClick={resetGame}> Reset Game </button>
 			<section className="game">
 				{
 					board.map( (_, index) => {
@@ -96,10 +104,36 @@ function App() {
 					} )
 				}
 			</section>
+
 			<section className="turn">
 				<Square isSelected={ turn === TURNS.X }>{ TURNS.X }</Square>
 				<Square isSelected={ turn=== TURNS.O }>{ TURNS.O }</Square>
 			</section>
+
+			{
+				winner !== null &&  (
+					<section className="winner">
+						<div className="text">
+							<h2>
+								{
+									winner === false 
+										? "Empate"
+										: `Gano:`
+								}
+							</h2>
+
+							<header className="win">
+								{winner && <Square> { winner } </Square>}
+							</header>
+
+							<footer>
+								<button onClick={resetGame}> Empezar de nuevo</button>
+							</footer>
+						</div>
+					</section>
+				)
+			}
+
 		</main>
 
 )
