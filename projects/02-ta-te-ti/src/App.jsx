@@ -7,8 +7,16 @@ import { WinnerModal } from "./components/WinnerModal.jsx"
 
 
 function App() {
-	const [board, setBoard] = useState(Array(9).fill(null)) // fill() cambia los valores del array
-	const [turn, setTurn] = useState(TURNS.X)
+	const [board, setBoard] = useState( () => {
+		// hacemos esto porque NUNCA se debe poner un estado dentro de un condicional
+		// ademas buscar en el local storage es lento y sincrono. Por ende si buscamos cada vez que renderiza le quitaria rendimiento a la aplicacion
+		const boardFromStorage = window.localStorage.getItem("board")
+		return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null)}) // fill() cambia los valores del array
+	const [turn, setTurn] = useState(() => {
+		const turnFromStorage = window.localStorage.getItem("turn")
+		// "??" devuelve lo del lado derecho cuando lo del lado izquierdo es NULL o UNDEFINED
+		return turnFromStorage ?? TURNS.X})
+		
 
 	//null que no hay ganador y false empate
 	const [winner, setWinner] = useState(null)
@@ -20,10 +28,9 @@ function App() {
 		setBoard(Array(9).fill(null))
 		setTurn(TURNS.X)
 		setWinner(null)
+
+		window.localStorage.clear()
 	}
-
-
-
 
 
 	const updateBoard = ( index ) => {
@@ -39,6 +46,9 @@ function App() {
 		const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
 		setTurn(newTurn)
 
+		// guardar partida
+		window.localStorage.setItem("board", JSON.stringify(newBoard))
+		window.localStorage.setItem("turn", newTurn)
 		//revisar si hay ganador
 		const newWinner = checkWinnerFrom(newBoard)
 		if ( newWinner ) {
