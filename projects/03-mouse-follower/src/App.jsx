@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function App () {
+const FollowMouse = () => {
   const [enabled, setEnabled] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0 })
 
@@ -10,10 +10,18 @@ function App () {
 
     const handleMove = (event) => {
       const { clientX, clientY } = event
+      setPosition({ x: clientX, y: clientY })
     }
 
     if (enabled) {
       window.addEventListener('pointermove', handleMove)
+    }
+
+    // cleanUp
+    // el return se ejecuta cuando se desmonta el componente, y se encarga de limpiar las subscripciones a los eventos. Y tambien cada vez que cambia la dependencia
+    return () => {
+      window.removeEventListener('pointermove', handleMove)
+      // en la consola podemos usar el metodo getEventListener(window) para verificar cuantas veces se esta subcribiendo a un evento en caso de haber errores
     }
   }, [enabled])
 
@@ -23,19 +31,30 @@ function App () {
       <h3> Proyecto 3</h3>
       <div style={{
         position: 'absolute',
-        backgroundColor: '#09f',
-        borderRadius: '50%',
+        backgroundColor: '#09dddf',
+        borderRadius: ' 0 50% 50% 50%',
         opacity: 0.8,
         pointerEvents: 'none',
-        left: -20,
-        top: -20,
-        width: 40,
-        height: 40,
-        transform: `translate(${position.x}, ${position.y})`
+        left: -15,
+        top: -15,
+        width: 30,
+        height: 30,
+        transform: `translate(${position.x}px, ${position.y}px)`
       }}
       />
       <button onClick={() => setEnabled(!enabled)}>
         {enabled ? 'Desactivar' : 'Activar'} seguir puntero
+      </button>
+    </main>
+  )
+}
+
+function App () {
+  const [mounted, setMounted] = useState(true)
+  return (
+    <main>
+      {mounted && <FollowMouse />}
+      <button onClick={() => setMounted(!mounted)}> Toggle mounted FollowMouse component
       </button>
     </main>
   )
