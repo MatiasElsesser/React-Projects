@@ -24,8 +24,20 @@ const FollowMouse = () => {
       // en la consola podemos usar el metodo getEventListener(window) para verificar cuantas veces se esta subcribiendo a un evento en caso de haber errores
     }
   }, [enabled])
+  // [] --> se ejecuta cuando se monta el componente
+  // [enabled, ... , ...] --> se ejecuta cuando se monta el componente y cuando cambia
+  // undefined --> se ejecuta cada vez que se renderiza el componente
 
   // En un componente de React NUNCA debemos poner un addEvventListener del objeto window, ya que se ejecutaria cada vez que se renderiza dicho componente, por eso lo ponemos en el useEffect, para poder controlar cuando se ejecuta
+
+  useEffect(() => {
+    document.body.classList.toggle('no-cursor', enabled)
+
+    return () => {
+      document.body.classList.remove('no-cursor')
+    }
+  }, [enabled])
+
   return (
     <main>
       <h3> Proyecto 3</h3>
