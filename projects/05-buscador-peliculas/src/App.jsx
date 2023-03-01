@@ -1,6 +1,10 @@
 import './App.css'
+import { Movies } from './components/Movies'
+import { useMovies } from './hooks/useMovies'
 
 function App () {
+  const { movies } = useMovies()
+
   return (
     <div className='page'>
 
@@ -13,7 +17,7 @@ function App () {
       </header>
 
       <main>
-        Aquí iran los resultados
+        <Movies movies={movies} />
       </main>
     </div>
   )
