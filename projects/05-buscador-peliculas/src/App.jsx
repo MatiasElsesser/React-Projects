@@ -37,9 +37,9 @@ function useSearch () {
 }
 
 function App () {
-  const { movies } = useMovies()
-  // const inputRef = useRef() 'pasamos la constante como propiedad "ref" en el input'
   const { search, updateSearch, error } = useSearch()
+  const { movies, getMovies } = useMovies({ search })
+  // const inputRef = useRef() 'pasamos la constante como propiedad "ref" en el input'
 
   const handleSubmit = (event) => {
     // esta es la forma no controlada
@@ -52,7 +52,7 @@ function App () {
     // const { query } = Object.fromEntries(
     //   new window.FormData(event.target)
     // )
-    console.log({ search })
+    getMovies()
   }
 
   const handleChange = (event) => {
