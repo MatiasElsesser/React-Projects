@@ -42,3 +42,7 @@ main {
   box-shadow: 0 0 25px #000;
   margin-top: 15px;
 }
+
+.header {
+  margin-bottom: 15px;
+}

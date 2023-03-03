@@ -63,7 +63,7 @@ function App () {
   return (
     <div className='page'>
 
-      <header>
+      <header className='header'>
         <h1>Buscador de peliculas</h1>
         <form className='form' onSubmit={handleSubmit}>
           <input onChange={handleChange} value={search} name='query' placeholder='Avengers, Star Wars, The Matrix ...' />
@@ -71,7 +71,7 @@ function App () {
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </header>
-
+      <hr />
       <main>
         <Movies movies={movies} />
       </main>
