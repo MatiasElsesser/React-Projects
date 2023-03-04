@@ -1,30 +1,28 @@
-// import withResults from '../moks/with-results.json'
-import noResults from '../moks/no-results.json'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import { searchMovies } from '../services/movies'
 
 export function useMovies ({ search }) {
-  const [responseMovies, setResponseMovies] = useState([])
-  const movies = responseMovies.Search
+  const [movies, setMovies] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-  const mappedMovies = movies?.map(movie => ({
-    id: movie.imdbID,
-    title: movie.Title,
-    year: movie.Year,
-    poster: movie.Poster
-  }))
+  // guardamos la referencia anterior para evitar que se haga la misma peticion dos veces, recordar que la referencia persiste al renderizado, por eso la actualizamos mas abajo
+  const previousSearch = useRef(search)
 
-  const getMovies = () => {
-    if (search) {
-      // setResponseMovies(withResults)
-      fetch(`http://www.omdbapi.com/?apikey=c41c4a36&s=${search}`)
-        .then(res => res.json())
-        .then(json => {
-          setResponseMovies(json)
-        })
-    } else {
-      setResponseMovies(noResults)
+  const getMovies = async () => {
+    if (search === previousSearch.current) return
+    try {
+      setLoading(true)
+      setError(null)
+      previousSearch.current = search
+      const newMovies = await searchMovies({ search })
+      setMovies(newMovies)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
     }
   }
 
-  return { movies: mappedMovies, getMovies }
+  return { movies, getMovies, loading, error }
 }

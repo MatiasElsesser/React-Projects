@@ -38,7 +38,7 @@ function useSearch () {
 
 function App () {
   const { search, updateSearch, error } = useSearch()
-  const { movies, getMovies } = useMovies({ search })
+  const { loading, movies, getMovies } = useMovies({ search })
   // const inputRef = useRef() 'pasamos la constante como propiedad "ref" en el input'
 
   const handleSubmit = (event) => {
@@ -73,7 +73,10 @@ function App () {
       </header>
       <hr />
       <main>
-        <Movies movies={movies} />
+        {
+        loading ? <p> Cargando... </p> : <Movies movies={movies} />
+      }
+
       </main>
     </div>
   )
