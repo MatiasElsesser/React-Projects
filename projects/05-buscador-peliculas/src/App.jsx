@@ -1,8 +1,8 @@
 import './App.css'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
-
+import debounce from 'just-debounce-it'
 // useRef es un hook de React que nos permite crear una referencia mutable a un elemento del DOM o a un valor cualquiera que persiste entre renderizados
 
 function useSearch () {
@@ -37,9 +37,16 @@ function useSearch () {
 }
 
 function App () {
+  const [sort, setSort] = useState(false)
   const { search, updateSearch, error } = useSearch()
-  const { loading, movies, getMovies } = useMovies({ search })
+  const { loading, movies, getMovies } = useMovies({ search, sort })
   // const inputRef = useRef() 'pasamos la constante como propiedad "ref" en el input'
+
+  const debouncedGetMovies = useCallback(
+    debounce(search => {
+      getMovies({ search })
+    }, 300)
+    , [getMovies])
 
   const handleSubmit = (event) => {
     // esta es la forma no controlada
@@ -52,12 +59,18 @@ function App () {
     // const { query } = Object.fromEntries(
     //   new window.FormData(event.target)
     // )
-    getMovies()
+    getMovies({ search })
+  }
+
+  const handleSort = () => {
+    setSort(!sort)
   }
 
   const handleChange = (event) => {
+    const newSearch = event.target.value
     // esta es la forma controlada, asignandole un estado
-    updateSearch(event.target.value)
+    updateSearch(newSearch)
+    debouncedGetMovies(newSearch)
   }
 
   return (
@@ -67,6 +80,7 @@ function App () {
         <h1>Buscador de peliculas</h1>
         <form className='form' onSubmit={handleSubmit}>
           <input onChange={handleChange} value={search} name='query' placeholder='Avengers, Star Wars, The Matrix ...' />
+          <input type='checkbox' onChange={handleSort} checked={sort} />
           <button type='submit'> Buscar</button>
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
