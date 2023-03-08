@@ -1,18 +1,17 @@
-import { useState, useId } from 'react'
+import { useId } from 'react'
 import { useFilters } from '../src/hooks/useFilters'
 import './Filters.css'
 
 export function Filters () {
-  const { setFilters } = useFilters()
-  const [minPrice, setMinPrice] = useState(0)
+  const { filters, setFilters } = useFilters()
 
   // React guarda el orden en que se llaman los componentes y a su vez los elementos de cada componente, asi le otorga un valor unico a cada elemento
   // esta id creada va a ser unica y va  aservir tanto como para el servidor como para el cliente
   const minPriceFilterId = useId()
   const categoryFilterId = useId()
 
+  // aqui usamos el estado global en lugar de un estado local, ya que sino tendriamos dos fuentes de la verdad
   const handleChangeMinPrice = (event) => {
-    setMinPrice(event.target.value)
     setFilters(prevState => ({
       ...prevState,
       minPrice: event.target.value
@@ -37,8 +36,9 @@ export function Filters () {
           min='0'
           max='1000'
           onChange={handleChangeMinPrice}
+          value={filters.minPrice}
         />
-        <span>${minPrice}</span>
+        <span>${filters.minPrice}</span>
       </div>
 
       <div>
