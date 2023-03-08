@@ -1,0 +1,32 @@
+El contexto se utiliza para pasar propiedades sin recurrir al 'prop drilling', no necesariamente se debe utilizar para tener un estado global de la aplicacion, en algunas ocaciones puede permanecer estatico
+
+Primero creamos el contexto con 'createContext':
+    export const FiltersContext = createContext()
+    (recordar importar createContext)
+
+Segundo creamos el provider, que va a ser lo que nos va a proveer el acceso al contexto
+    export function FiltersProvider ({ children }) {
+  return (
+    <FiltersContext.Provider value={{
+      category: 'all',
+      minPrice: 0
+    }}
+    >
+      {children}
+    </FiltersContext.Provider>
+  )
+}
+
+    En este caso le pasamos la prop children y le expecificamos que todo lo que envuelva el componente <FiltersContext.Provider> va a poder utilizar el objeto pasado como parametro en value
+
+Despues de eso envolvimos el componente principal <App /> con el componente que provee el acceso, esto lo hicimos en el punto de acceso, o sea en el main.jsx
+
+    ReactDOM.createRoot(document.getElementById('root')).render(
+    // envolvemos toda la app porque le pasamos la prop children al contexto
+    <FiltersProvider>
+        <App />
+    </FiltersProvider>
+    )
+
+Luego lo consumimos a traves de FiltersContext guardandolo en una variable y usando useContext
+      const filters = useContext(FiltersContext)
