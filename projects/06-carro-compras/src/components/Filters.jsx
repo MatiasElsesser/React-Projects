@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { useFilters } from '../src/hooks/useFilters'
+import { useFilters } from '../hooks/useFilters'
 import './Filters.css'
 
 export function Filters () {
