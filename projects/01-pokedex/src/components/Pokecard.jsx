@@ -1,4 +1,7 @@
 export const Pokecard = ({ name, id, img, types, stats }) => {
+  const firstLetterUpperCase = (string) => {
+    return string[0].toUpperCase() + string.slice(1)
+  }
   return (
     <div className='pokecard'>
       <h3>{firstLetterUpperCase(name)}</h3>
@@ -26,8 +29,4 @@ export const Pokecard = ({ name, id, img, types, stats }) => {
 
     </div>
   )
-}
-
-function firstLetterUpperCase (string) {
-  return string[0].toUpperCase() + string.slice(1)
 }
