@@ -1,0 +1,53 @@
+* {
+    box-sizing: border-box;
+}
+.pokecard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border: 2px solid cyan;
+    border-radius: 15px;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.stats-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.stats-content p {
+    width: 60px;
+    height: 30px;
+    padding: 15px;
+    margin: 15px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bar {
+    width: 150px;
+    height: 20px;
+    border: 1px solid black;
+    border-radius: 15px;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.progress-bar {
+    height: 100%; 
+    background-color: cyan;
+    border-radius: 15px;
+    width: 50%;
+}

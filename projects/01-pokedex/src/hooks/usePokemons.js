@@ -9,13 +9,10 @@ export const usePokemons = () => {
     fetch(URL_API)
       .then(res => res.json())
       .then(json => {
-      // console.log(json)
         json.results.forEach(element => {
-        // console.log(element)
           fetch(element.url)
             .then(res => res.json())
             .then(json => {
-              // console.log(json)
               const pokemon = {
                 name: json.name,
                 id: json.id,

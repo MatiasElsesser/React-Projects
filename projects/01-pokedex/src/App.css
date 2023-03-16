@@ -18,26 +18,3 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 15px;   
 }
-.pokecard {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    border: 2px solid cyan;
-    border-radius: 15px;
-}
-
-.stats-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.stats-content {
-    width: 90%;
-    padding: 0 15px;
-    display: flex;
-    justify-content: space-between;
-}
