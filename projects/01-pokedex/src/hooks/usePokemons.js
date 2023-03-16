@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 
-const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
+const URL_API = 'https://pokeapi.co/api/v2/pokemon/?offset='
 
 export const usePokemons = () => {
   const [pokemons, setPokemons] = useState([])
+  const [offset, setOffset] = useState(20)
 
   useEffect(() => {
-    fetch(URL_API)
+    fetch(`${URL_API}${offset}`)
       .then(res => res.json())
       .then(json => {
         json.results.forEach(element => {
@@ -24,7 +25,7 @@ export const usePokemons = () => {
             })
         })
       })
-  }, [])
+  }, [offset])
 
-  return { pokemons }
+  return { pokemons, setOffset, setPokemons }
 }
