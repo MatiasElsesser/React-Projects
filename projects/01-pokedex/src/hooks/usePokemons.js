@@ -4,7 +4,7 @@ const URL_API = 'https://pokeapi.co/api/v2/pokemon/?offset='
 
 export const usePokemons = () => {
   const [pokemons, setPokemons] = useState([])
-  const [offset, setOffset] = useState(20)
+  const [offset, setOffset] = useState(0)
 
   useEffect(() => {
     fetch(`${URL_API}${offset}`)
@@ -27,5 +27,5 @@ export const usePokemons = () => {
       })
   }, [offset])
 
-  return { pokemons, setOffset, setPokemons }
+  return { pokemons, setOffset, setPokemons, offset }
 }

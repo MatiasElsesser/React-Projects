@@ -4,11 +4,16 @@ import { HeaderApp } from './components/HeaderApp'
 import './App.css'
 
 function App () {
-  const { pokemons, setOffset, setPokemons } = usePokemons()
+  const { pokemons, setOffset, offset, setPokemons } = usePokemons()
 
-  const handleClick = () => {
+  const handleClickAfter = () => {
     setPokemons([])
     setOffset(prev => prev + 20)
+  }
+
+  const handleClickBefore = () => {
+    setPokemons([])
+    setOffset(prev => prev - 20)
   }
 
   return (
@@ -30,8 +35,10 @@ function App () {
           })}
         </section>
         <div className='buttons-container'>
-          <button> Anterior </button>
-          <button onClick={handleClick}> Siguiente </button>
+          {(offset === 0)
+            ? <button disabled> Anterior </button>
+            : <button onClick={handleClickBefore}> Anterior</button>}
+          <button onClick={handleClickAfter}> Siguiente </button>
         </div>
       </main>
     </>

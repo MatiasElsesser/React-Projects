@@ -11,6 +11,29 @@
     border-radius: 15px;
 }
 
+.types {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.types p {
+    width: 40%;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 1px solid #000;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+
 .stats-container {
     display: flex;
     flex-direction: column;

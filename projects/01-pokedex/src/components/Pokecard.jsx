@@ -33,7 +33,12 @@ export const Pokecard = ({ name, id, img, types, stats }) => {
       <section className='types'>
         {types.map((el) => {
           return (
-            <p key={el.slot}> {firstLetterUpperCase(el.type.name)}</p>
+            <p
+              key={el.slot}
+              style={{ backgroundColor: `${typeColors[el.type.name]}` }}
+            >
+              {firstLetterUpperCase(el.type.name)}
+            </p>
           )
         })}
       </section>
@@ -46,9 +51,7 @@ export const Pokecard = ({ name, id, img, types, stats }) => {
               <div className='bar'>
                 <div
                   className='progress-bar'
-                  style={(stat.base_stat > 100)
-                    ? { width: '100%' }
-                    : { width: `${stat.base_stat}%` }}
+                  style={{ width: `${stat.base_stat * 100 / 200}%` }}
                 />
               </div>
               <p> {stat.base_stat}</p>
