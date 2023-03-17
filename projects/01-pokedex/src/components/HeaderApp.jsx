@@ -15,17 +15,12 @@ export const HeaderApp = () => {
     setSearch(value)
   }
 
-  const handleChange = (e) => {
-    const newSearch = e.target.value
-    setSearch(newSearch)
-  }
-
   return (
     <header className='header'>
       <h1> Pokedex </h1>
       <form className='form' onSubmit={handleSubmit}>
         <label htmlFor={inputSearchPokemon}> Buscar Pokemon por nombre:</label>
-        <input type='text' id={inputSearchPokemon} ref={inputRef} onChange={handleChange} />
+        <input type='text' id={inputSearchPokemon} ref={inputRef} />
         <button type='submit'>Buscar</button>
       </form>
       <div className='header-results'>

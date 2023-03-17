@@ -1,18 +1,22 @@
 import { Pokecard } from './components/Pokecard'
 import { usePokemons } from './hooks/usePokemons'
 import { HeaderApp } from './components/HeaderApp'
+import { useState } from 'react'
 import './App.css'
 
 function App () {
   const { pokemons, setOffset, offset, setPokemons } = usePokemons()
+  const [count, setCount] = useState(0)
 
   const handleClickAfter = () => {
     setPokemons([])
+    setCount(prev => ++prev)
     setOffset(prev => prev + 20)
   }
 
   const handleClickBefore = () => {
     setPokemons([])
+    setCount(prev => --prev)
     setOffset(prev => prev - 20)
   }
 
@@ -38,6 +42,7 @@ function App () {
           {(offset === 0)
             ? <button disabled> Anterior </button>
             : <button onClick={handleClickBefore}> Anterior</button>}
+          <button> {count}</button>
           <button onClick={handleClickAfter}> Siguiente </button>
         </div>
       </main>
