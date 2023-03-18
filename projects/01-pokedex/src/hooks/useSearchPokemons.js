@@ -3,10 +3,15 @@ import { useState, useEffect } from 'react'
 export const useSearchPokemons = ({ search, inputRef }) => {
   const [pokemonSearch, setPokemonSearch] = useState([])
   const [error, setError] = useState(null)
+  const [historySearch, setHistorySearch] = useState([''])
 
   useEffect(() => {
     if (search === '') {
       setError('La busqueda no contiene nada')
+      return
+    }
+    if (historySearch.includes(search)) {
+      setError(`${search} ya esta entre tus busquedas`)
       return
     }
 
@@ -21,6 +26,7 @@ export const useSearchPokemons = ({ search, inputRef }) => {
     }
 
     setError(null)
+    setHistorySearch(prev => [...prev, search])
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${search.toLowerCase()}`)
       .then(res => res.json())
@@ -36,7 +42,7 @@ export const useSearchPokemons = ({ search, inputRef }) => {
       })
   }, [search])
 
-  return { pokemonSearch, error }
+  return { setPokemonSearch, setHistorySearch, pokemonSearch, error }
 }
 
 // export const useSearchPokemons = (search) => {

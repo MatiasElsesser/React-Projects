@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
 
-    border: 2px solid cyan;
+    border: 2px solid #535bf2;
     border-radius: 15px;
 }
 
@@ -70,7 +70,7 @@
 
 .progress-bar {
     height: 100%; 
-    background-color: cyan;
+    background-color: #535bf2;
     border-radius: 15px;
     width: 50%;
 }

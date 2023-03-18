@@ -3,6 +3,7 @@ import { usePokemons } from './hooks/usePokemons'
 import { HeaderApp } from './components/HeaderApp'
 import { useState } from 'react'
 import './App.css'
+import { ButtonsFooter } from './components/ButtonsFooter'
 
 function App () {
   const { pokemons, setOffset, offset, setPokemons } = usePokemons()
@@ -23,6 +24,7 @@ function App () {
   return (
     <>
       <HeaderApp />
+      <h3>Listado de Pokmemons</h3>
       <main className='main'>
         <section className='cardsDefault'>
           {pokemons.length > 0 && pokemons.map((el) => {
@@ -38,13 +40,12 @@ function App () {
             )
           })}
         </section>
-        <div className='buttons-container'>
-          {(offset === 0)
-            ? <button disabled> Anterior </button>
-            : <button onClick={handleClickBefore}> Anterior</button>}
-          <button> {count}</button>
-          <button onClick={handleClickAfter}> Siguiente </button>
-        </div>
+        <ButtonsFooter
+          offset={offset}
+          clickAfter={handleClickAfter}
+          clickBefore={handleClickBefore}
+          count={count}
+        />
       </main>
     </>
   )
