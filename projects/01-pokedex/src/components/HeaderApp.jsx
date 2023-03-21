@@ -7,7 +7,7 @@ export const HeaderApp = () => {
   const inputSearchPokemon = useId()
   const inputRef = useRef()
   const [search, setSearch] = useState('')
-  const { pokemonSearch, setPokemonSearch, error, setHistorySearch } = useSearchPokemons({ search, inputRef })
+  const { pokemonSearch, setPokemonSearch, error, setHistorySearch } = useSearchPokemons({ search })
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -15,22 +15,25 @@ export const HeaderApp = () => {
     setSearch(value)
   }
   const handleReset = () => {
-    setPokemonSearch([])
     setHistorySearch([])
+    setPokemonSearch([])
   }
 
   return (
     <header className='header'>
       <h1> Pokedex </h1>
+
       <form className='form' onSubmit={handleSubmit}>
         <label htmlFor={inputSearchPokemon}> Buscar Pokemon por nombre:</label>
         <input type='text' id={inputSearchPokemon} ref={inputRef} />
         <button type='submit'>Buscar</button>
         <button onClick={handleReset}> Reset </button>
       </form>
+
       <div className='header-results'>
         <p>Resultados:</p>
         {error && <p style={{ color: 'red' }}>{error}</p>}
+
         <div className='results-container'>
           {pokemonSearch.length > 0 &&
         pokemonSearch.map((el) => {
@@ -46,6 +49,7 @@ export const HeaderApp = () => {
           )
         })}
         </div>
+
       </div>
     </header>
   )
