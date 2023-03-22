@@ -1,5 +1,11 @@
 import '../components/Pokecard.css'
 
+const colorStats = {
+  low: '#EE7261',
+  averange: '#F5C247',
+  good: '#4ABAA0'
+}
+
 const typeColors = {
   electric: '#FFEA70',
   normal: '#B09398',
@@ -26,9 +32,15 @@ export const Pokecard = ({ name, id, img, types, stats }) => {
   }
   return (
     <div className='pokecard'>
-      <h3>{firstLetterUpperCase(name)}</h3>
-      <p> N° {id}</p>
-      <img src={img} />
+      <div className='pokecard-header'>
+
+        <div className='pokecard-name'>
+          <h3>{firstLetterUpperCase(name)}</h3>
+          <p> N° {id}</p>
+        </div>
+
+        <img src={img} />
+      </div>
 
       <section className='types'>
         {types.map((el) => {
@@ -45,13 +57,27 @@ export const Pokecard = ({ name, id, img, types, stats }) => {
 
       <section className='stats-container'>
         {stats.map((stat) => {
+          let colorPick = ''
+          if (stat.base_stat > 100) {
+            colorPick = colorStats.good
+          } else if (stat.base_stat > 70) {
+            colorPick = colorStats.averange
+          } else {
+            colorPick = colorStats.low
+          }
+
           return (
             <div key={stat.stat.url} className='stats-content'>
               <p> {firstLetterUpperCase(stat.stat.name)}</p>
               <div className='bar'>
                 <div
                   className='progress-bar'
-                  style={{ width: `${stat.base_stat * 100 / 200}%` }}
+                  style={
+                    {
+                      width: `${stat.base_stat * 100 / 150}%`,
+                      backgroundColor: `${colorPick}`
+                    }
+                    }
                 />
               </div>
               <p> {stat.base_stat}</p>

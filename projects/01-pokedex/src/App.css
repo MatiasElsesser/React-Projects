@@ -16,8 +16,11 @@ body {
 }
 
 .cardsDefault {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 15px;   
 }
 
@@ -37,4 +40,11 @@ body {
     border: none;
     width: 6rem;
     height: 35px;
+}
+
+@media (max-width:  450px) {
+    .cardsDefault {
+        flex-direction: column;
+        align-items: center;
+    }
 }
