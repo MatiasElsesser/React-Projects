@@ -16,7 +16,7 @@ export const useSearchPokemons = ({ search }) => {
     }
 
     if (search.match(/^\d+$/)) {
-      setError('No se puede buscar una Pokemon con un número')
+      setError('No se puede buscar un Pokemon con un número')
       return
     }
 
