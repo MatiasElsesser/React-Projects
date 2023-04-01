@@ -35,9 +35,11 @@ function App () {
   return (
     <>
       <HeaderApp />
-      <h3>Listado de Pokmemons</h3>
-      <label>
-        Filtrar por tipo:
+      <h2>Listado de Pokemons</h2>
+      <div className='filter-container'>
+        <label>
+          Filtrar por tipo:
+        </label>
         <select
           value={valueSelect}
           onChange={handleSelected}
@@ -60,21 +62,10 @@ function App () {
           <option value='steel'>Steel</option>
           <option value='psychic'>Psychic</option>
         </select>
-      </label>
+      </div>
       <main className='main'>
+
         <section className='cardsDefault'>
-          {/* {pokemons.length > 0 && pokemons.map((el) => {
-            return (
-              <Pokecard
-                key={el.id}
-                img={el.img}
-                name={el.name}
-                id={el.id}
-                types={el.types}
-                stats={el.stats}
-              />
-            )
-          })} */}
           {
             filteredPokemons.length > 0 && filteredPokemons.map((el) => {
               return (
@@ -88,7 +79,7 @@ function App () {
                 />
               )
             })
-}
+          }
 
         </section>
         <ButtonsFooter

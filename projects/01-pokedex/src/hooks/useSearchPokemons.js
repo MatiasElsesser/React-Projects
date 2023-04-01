@@ -10,7 +10,7 @@ export const useSearchPokemons = ({ search }) => {
       setError('La busqueda no contiene nada')
       return
     }
-    if (historySearch.includes(search)) {
+    if (historySearch.includes(search.toLowerCase())) {
       setError(`${search} ya esta entre tus busquedas`)
       return
     }

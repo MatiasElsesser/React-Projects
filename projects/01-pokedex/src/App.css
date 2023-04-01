@@ -15,6 +15,10 @@ body {
     height: 100vh;
 }
 
+h2 {
+    font-size: 2rem;
+}
+
 .cardsDefault {
     /* display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
@@ -40,6 +44,22 @@ body {
     border: none;
     width: 6rem;
     height: 35px;
+}
+
+.filter-container {
+    margin: 40px 0 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.filter-container label {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.filter-container select {
+    width: 8rem;
 }
 
 @media (max-width:  450px) {

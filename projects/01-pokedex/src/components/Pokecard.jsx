@@ -57,6 +57,8 @@ export const Pokecard = ({ name, id, img, types, stats }) => {
 
       <section className='stats-container'>
         {stats.map((stat) => {
+          const barWidth = (stat.base_stat > 150) ? '100%' : `${stat.base_stat * 100 / 150}%`
+
           let colorPick = ''
           if (stat.base_stat > 100) {
             colorPick = colorStats.good
@@ -73,8 +75,9 @@ export const Pokecard = ({ name, id, img, types, stats }) => {
                 <div
                   className='progress-bar'
                   style={
+
                     {
-                      width: `${stat.base_stat * 100 / 150}%`,
+                      width: `${barWidth}`,
                       backgroundColor: `${colorPick}`
                     }
                     }
