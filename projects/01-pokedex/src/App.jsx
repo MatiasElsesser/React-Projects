@@ -37,10 +37,11 @@ function App () {
       <HeaderApp />
       <h2>Listado de Pokemons</h2>
       <div className='filter-container'>
-        <label>
+        <label htmlFor='filterInput'>
           Filtrar por tipo:
         </label>
         <select
+          id='filterInput'
           value={valueSelect}
           onChange={handleSelected}
         >
@@ -80,8 +81,8 @@ function App () {
               )
             })
           }
-
         </section>
+
         <ButtonsFooter
           offset={offset}
           clickAfter={handleClickAfter}

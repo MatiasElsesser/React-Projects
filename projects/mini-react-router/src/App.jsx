@@ -1,31 +1,27 @@
-import { useEffect, useState } from 'react'
 import './App.css'
-import { EVENTS } from './const'
 import HomePage from './pages/Home'
 import AboutPage from './pages/About'
+import Page404 from './pages/404'
+import { Router } from './Router'
+
+const appRoutes = [
+  {
+    path: '/',
+    Component: HomePage
+  },
+  {
+    path: '/about',
+    Component: AboutPage
+  }
+]
 
 function App () {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname)
-
-  useEffect(() => {
-    const onLocationChange = () => {
-      setCurrentPath(window.location.pathname)
-    }
-
-    window.addEventListener(EVENTS.PUSHSTATE, onLocationChange)
-    // popstate es el evento cuando en el navegador le damos al boton de atras
-    window.addEventListener(EVENTS.POPSTATE, onLocationChange)
-
-    return () => {
-      window.removeEventListener(EVENTS.PUSHSTATE, onLocationChange)
-      window.removeEventListener(EVENTS.POPSTATE, onLocationChange)
-    }
-  }, [])
-
   return (
     <main>
-      {currentPath === '/' && <HomePage />}
-      {currentPath === '/about' && <AboutPage />}
+      <Router
+        routes={appRoutes}
+        defaulltComponent={Page404}
+      />
     </main>
   )
 }
