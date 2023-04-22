@@ -60,8 +60,8 @@ function App () {
       <button onClick={resetGame}> Reset Game </button>
       <section className='game'>
         {
-		board.map((square, index) => {
-		 	return (
+		      board.map((square, index) => {
+		      return (
   <Square
     key={index}
     index={index}
@@ -69,8 +69,8 @@ function App () {
   >
     {square}
   </Square>
-					  )
-		})
+		  )
+		      })
 				}
       </section>
 
