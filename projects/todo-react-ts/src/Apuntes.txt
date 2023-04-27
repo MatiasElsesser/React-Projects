@@ -1,0 +1,61 @@
+"Record"
+    Esta función te permite crear un tipo de datos que mapea un conjunto de claves (keys) a un tipo de valor determinado. La sintaxis de la función "Record" es la siguiente:
+
+    Record<K extends string | number | symbol, T>
+
+    Donde "K" es el tipo de datos de la clave y "T" es el tipo de datos del valor. Por ejemplo, si quieres crear un tipo de datos que mapea nombres de colores a códigos hexadecimales, puedes hacerlo así:
+
+"Partial"
+    Esta función te permite crear un tipo de datos que es igual al tipo de datos original, pero donde todas las propiedades son opcionales. La sintaxis de la función "Partial" es la siguiente:
+
+    Partial<T>
+
+    Donde "T" es el tipo de datos original. Por ejemplo, si tienes el siguiente tipo de datos:
+
+    type Persona = {
+        nombre: string;
+        apellido: string;
+        edad: number;
+        dirección: string;
+        teléfono: string;
+    }
+
+    Y quieres crear un nuevo tipo de datos que tenga las mismas propiedades, pero todas opcionales, puedes hacer lo siguiente:
+
+    // Uso:
+    type PersonaOpcional = Partial<Persona>;
+
+    const persona: PersonaOpcional = {
+      nombre: 'Juan',
+      apellido: 'Pérez'
+    };
+    En este caso, la propiedad "edad", "dirección" y "teléfono" son opcionales.
+
+"Required"
+    Esta función te permite crear un tipo de datos que es igual al tipo de datos original, pero donde todas las propiedades son obligatorias. La sintaxis de la función "Required" es la siguiente:
+
+    Required<T>
+
+    Donde "T" es el tipo de datos original. Por ejemplo, si tienes el siguiente tipo de datos:
+
+    type PersonaOpcional = {
+      nombre?: string;
+      apellido?: string;
+      edad?: number;
+      dirección?: string;
+      teléfono?: string;
+    }
+
+    Y quieres crear un nuevo tipo de datos que tenga las mismas propiedades, pero todas obligatorias, puedes hacer lo siguiente:
+
+// Uso:
+    type Persona = Required<PersonaOpcional>;
+
+    const persona: Persona = {
+      nombre: 'Juan',
+      apellido: 'Pérez',
+      edad: 30,
+      dirección: 'Calle falsa 123',
+      teléfono: '555-1234'
+    };
+    En este caso, todas las propiedades son obligatorias.
