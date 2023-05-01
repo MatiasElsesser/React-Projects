@@ -97,3 +97,5 @@ const App = (): JSX.Element => {
 }
 
 export default App
+
+// peding fixx all bugs
