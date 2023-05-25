@@ -1,9 +1,11 @@
 import './App.css'
+import { ListOfUsers } from './components/ListOfUsers'
 
 function App () {
   return (
     <>
-      <p>CRUD WITH REACT</p>
+      <h1>Proyecto CRUD con React y Redux</h1>
+      <ListOfUsers />
     </>
   )
 }
