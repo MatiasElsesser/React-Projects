@@ -10,55 +10,17 @@ import {
   Badge
 } from '@tremor/react'
 
-const users: {
-  id: string;
-  name: string;
-  email: string;
-  github: string;
-}[] = [
-  {
-    id: '1',
-    name: 'Peter Doe',
-    email: 'peter@gmail.com',
-    github: 'petDoe'
-  },
-  {
-    id: '2',
-    name: 'Patrice Ferrell',
-    email: 'p_ferrell@gmail.com',
-    github: 'ferri'
-  },
-  {
-    id: '3',
-    name: 'Daniel Atlas',
-    email: 'daniatlas@gmail.com',
-    github: 'danielAtlas'
-  },
-  {
-    id: '4',
-    name: 'Doroty Mikado',
-    email: 'mikado@gmail.com',
-    github: 'Doromika'
-  },
-  {
-    id: '5',
-    name: 'Matias Elsesser',
-    email: 'elsesser3@gmail.com',
-    github: 'matiaselsesser'
-  },
-  {
-    id: '6',
-    name: 'Giulia Beckembauer',
-    email: 'beckGiulia@gmail.com',
-    github: 'beck'
-  }
-]
+import { useSelector } from 'react-redux'
 
 export function ListOfUsers () {
+  // aqui accedemos a la store y le decimos de que el reducer nos pase el reducer que creamos en en el slice de users
+  const users = useSelector((state) => state.users)
+
   return (
     <Card>
-      <Title>Usuarios</Title>
-      <Badge>{users.length}</Badge>
+      <Title>Usuarios
+        <Badge style={{ marginLeft: '8px' }}>{users.length}</Badge>
+      </Title>
       <Table>
         <TableHead>
           <TableRow>
