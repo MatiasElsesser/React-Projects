@@ -9,3 +9,7 @@ export const store = configureStore({
     users: usersReducer
   }
 })
+// le decimos que de la funcion getState de store, el tipo que devuelva va a ser el tipo que tenga RootState
+export type RootState = ReturnType<typeof store.getState>
+// lo mismo que arriba pero con el dispatch
+export type AppDispatch = typeof store.dispatch

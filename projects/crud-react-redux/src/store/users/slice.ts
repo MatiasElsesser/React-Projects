@@ -1,8 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 // un slice es como un pedazo de la store, se usa para mantener ordenado el estado. Asi lo dividimos en varios elementos
 
 // el slice necesita su nombre, su estado inicial y el reducer que va  autilizar
+
+export type UserId = string
 
 export interface User {
   name: string
@@ -11,7 +13,7 @@ export interface User {
 }
 
 export interface UserWhitId extends User {
-  id: string
+  id: UserId
 }
 
 const initialState: Array<UserWhitId> = [
@@ -56,9 +58,15 @@ const initialState: Array<UserWhitId> = [
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {}
+  reducers: {
+    deleteUsersById: (state, action: PayloadAction<UserId>) => {
+      const { payload } = action
+      return state.filter((user) => user.id !== payload)
+    }
+  }
 })
 
 // exportamos solo el reducer porque seguramente va a ser lo que necesitemos
 // un reducer es como lo que usamos en el hook "useReducer", en el cual le pasamos la accion a realizar y este tranforma el estado
 export default usersSlice.reducer
+export const { deleteUsersById } = usersSlice.actions
