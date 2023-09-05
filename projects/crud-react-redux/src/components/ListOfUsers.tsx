@@ -10,17 +10,14 @@ import {
   Badge
 } from '@tremor/react'
 
-import { useAppSelector, useAppDispatch } from '../hooks/store'
-import { UserId, deleteUsersById } from '../store/users/slice'
+import { useAppSelector } from '../hooks/store'
+
+import { useUserActions } from '../hooks/useUserActions'
 
 export function ListOfUsers () {
   // aqui accedemos a la store y le decimos de que el reducer nos pase el reducer que creamos en en el slice de users
   const users = useAppSelector((state) => state.users)
-  const dispatch = useAppDispatch()
-
-  const handleRemoveUser = (id: UserId) => {
-    dispatch(deleteUsersById(id))
-  }
+  const { removeUser } = useUserActions()
 
   return (
     <Card>
@@ -74,7 +71,7 @@ export function ListOfUsers () {
                   </svg>
                 </button>
 
-                <button onClick={() => handleRemoveUser(item.id)} type='button'>
+                <button onClick={() => removeUser(item.id)} type='button'>
                   <svg
                     aria-label='Remove element'
                     xmlns='http://www.w3.org/2000/svg'

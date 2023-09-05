@@ -4,19 +4,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 // el slice necesita su nombre, su estado inicial y el reducer que va  autilizar
 
-export type UserId = string
-
-export interface User {
-  name: string
-  email: string
-  github: string
-}
-
-export interface UserWhitId extends User {
-  id: UserId
-}
-
-const initialState: Array<UserWhitId> = [
+const DEFAULT_STATE = [
   {
     id: '1',
     name: 'Peter Doe',
@@ -55,13 +43,38 @@ const initialState: Array<UserWhitId> = [
   }
 ]
 
+export type UserId = string
+
+export interface User {
+  name: string
+  email: string
+  github: string
+}
+
+export interface UserWhitId extends User {
+  id: UserId
+}
+
+const initialState: Array<UserWhitId> = (() => {
+  const persistanceState = localStorage.getItem('__redux_state__')
+  if (persistanceState) {
+    return JSON.parse(persistanceState).users
+  }
+  return DEFAULT_STATE
+})()
+
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
+    addNewUser: (state, action: PayloadAction<User>) => {
+      const id = crypto.randomUUID()
+      return [...state, { id, ...action.payload }]
+    },
     deleteUsersById: (state, action: PayloadAction<UserId>) => {
       const { payload } = action
       return state.filter((user) => user.id !== payload)
+      // PayloadAction es un tipo generico que provee redux
     }
   }
 })
@@ -69,4 +82,4 @@ export const usersSlice = createSlice({
 // exportamos solo el reducer porque seguramente va a ser lo que necesitemos
 // un reducer es como lo que usamos en el hook "useReducer", en el cual le pasamos la accion a realizar y este tranforma el estado
 export default usersSlice.reducer
-export const { deleteUsersById } = usersSlice.actions
+export const { addNewUser, deleteUsersById } = usersSlice.actions
