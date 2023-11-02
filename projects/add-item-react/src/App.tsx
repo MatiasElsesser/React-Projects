@@ -1,29 +1,22 @@
-import { useState } from 'react'
 import './App.css'
+import { Item } from './components/Item'
+import { useItems } from './hooks/useItems'
+import { useSEO } from './hooks/useSEO'
 
-type ItemId = `${string}-${string}-${string}-${string}-${string}`
+export type ItemId = `${string}-${string}-${string}-${string}-${string}`
 
-interface Item {
+export interface Item {
   id: ItemId
   timestamp: number
   text: string
 }
 
-const INITIAL_ITEMS: Item[] = [
-  {
-    id: crypto.randomUUID(),
-    timestamp: Date.now(),
-    text: 'Videojuegos'
-  }, 
-  {
-    id: crypto.randomUUID(),
-    timestamp: Date.now(),
-    text: 'Libros'
-  }
-]
-
 function App() {
-  const [items, setItems] = useState(INITIAL_ITEMS)
+  const { addItem, items, removeItem } = useItems()
+  useSEO({
+    title: `[${items.length}] Prueba tecnica de React`,
+    description: 'Añadir o eliminar elementos de una lista'
+  })
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -34,23 +27,15 @@ function App() {
     const isIntput = input instanceof HTMLInputElement
     if (!isIntput || input == null) return
 
-    const newItem: Item = {
-      id: crypto.randomUUID(),
-      text: input.value,
-      timestamp: Date.now()
-    }
+    addItem(input.value)
 
-    setItems((prevItems) => {
-      return [...prevItems, newItem]
-    })
     input.value = ''
   }
 
   const createHandleRemoveItem = (id: ItemId) => () => {
-    setItems((prevItems) =>{
-      return prevItems.filter(currentItem => currentItem.id !== id)
-    })
-  }
+      removeItem(id)
+    }
+  
 
   return (
     <main>
@@ -81,15 +66,10 @@ function App() {
                   {
                     items.map(item => {
                       return(
-                        <li
-                          key={item.id}
-                        >
-                          {item.text}
-                          <button
-                            onClick={createHandleRemoveItem(item.id)}>
-                            Eliminar elemento
-                          </button>
-                        </li>
+                        <Item 
+                          handleClick={createHandleRemoveItem(item.id)}
+                          {... item} key={item.id}
+                        />
                       )
                     })
                   }
@@ -100,5 +80,6 @@ function App() {
     </main>
   )
 }
+
 
 export default App
