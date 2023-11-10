@@ -8,10 +8,20 @@ const END_POINT = 'https://randomuser.me/api/?results=100'
 function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
+  const [sortByCountry, setSortByCountry] = useState(false)
 
   const toggleColor = () => {
     setShowColors(!showColors)
   }
+  const toggleSortByCountry = () => {
+    setSortByCountry(prevState => !prevState)
+  }
+
+  const sortedUsers = sortByCountry 
+    ? users.toSorted((a, b) => {
+    return a.location.country.localeCompare(b.location.country)
+  })
+  : users
 
   useEffect(() => {
     fetch(END_POINT)
@@ -29,10 +39,13 @@ function App () {
         <button onClick={toggleColor}>
           Colorear filas
         </button>
+        <button onClick={toggleSortByCountry}>
+          {sortByCountry ? 'Ordenar por defecto' : 'Ordenar por país'}
+        </button>
       </header>
 
       <main>
-        <UsersList users={users} showColors={showColors}/>
+        <UsersList users={sortedUsers} showColors={showColors}/>
       </main>
     </div>
   )
