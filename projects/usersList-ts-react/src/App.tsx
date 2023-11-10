@@ -17,6 +17,7 @@ function App () {
     setSortByCountry(prevState => !prevState)
   }
 
+  // toSorted no muta el array original, por ende no muta el estado, en caso de usar sort() hacerlo asi: [... state].sort()
   const sortedUsers = sortByCountry 
     ? users.toSorted((a, b) => {
     return a.location.country.localeCompare(b.location.country)
