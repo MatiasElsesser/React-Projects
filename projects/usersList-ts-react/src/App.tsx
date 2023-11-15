@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { type User } from './types'
 import { UsersList } from './components/UsersList'
@@ -9,6 +9,7 @@ function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
   const [sortByCountry, setSortByCountry] = useState(false)
+  const [filterCountry, setFilterCountry] = useState<string | null>(null)
 
   // useRef guarda un valor que se comparte entre renderizados
   // pero que al cambiar no vuelva a renderizar el componente
@@ -33,12 +34,24 @@ function App () {
     setUsers(originalUsers.current)
   }
 
-  // toSorted no muta el array original, por ende no muta el estado, en caso de usar sort() hacerlo asi: [... state].sort()
-  const sortedUsers = sortByCountry 
-    ? users.toSorted((a, b) => {
-    return a.location.country.localeCompare(b.location.country)
-  })
-  : users
+
+  const filteredUsers = useMemo(() => {
+    return filterCountry !== null && filterCountry.length > 0
+      ? users.filter((user) => {
+        return user.location.country.toLowerCase().includes(filterCountry.toLowerCase())
+        })
+      : users
+  },[users, filterCountry])
+
+    // con useMemo le decimos que el valor de la constante sortedUsers no lo vuelva a calcular entre renderizados a menos que cambie filteredUsers o sortByCountry
+    const sortedUsers = useMemo(() => {
+      // toSorted no muta el array original, por ende no muta el estado, en caso de usar sort() hacerlo asi: [... state].sort()
+      return sortByCountry 
+        ? filteredUsers.toSorted(
+            (a, b) => a.location.country.localeCompare(b.location.country)
+          )
+        : filteredUsers
+    }, [filteredUsers, sortByCountry])
 
   useEffect(() => {
     fetch(END_POINT)
@@ -66,6 +79,11 @@ function App () {
         <button onClick={handleReset}>
           Resetear usuarios
         </button>
+        <input 
+          placeholder='Filtrar por pais'
+          onChange={(event) =>{
+            setFilterCountry(event.target.value)
+          }}/>
       </header>
 
       <main>
