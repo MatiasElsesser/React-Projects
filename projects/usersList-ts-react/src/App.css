@@ -10,6 +10,14 @@ header {
   justify-content: center;
   gap: 25px;
 }
+
+.table--showColors tr:nth-child(2n) {
+  background: #333;
+}
+.table--showColors tr:nth-child(2n + 1) {
+  background: #666;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;

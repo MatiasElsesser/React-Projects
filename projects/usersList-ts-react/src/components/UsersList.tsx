@@ -19,13 +19,11 @@ export const UsersList =({users, showColors, handleDelete}: Props) => {
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className={showColors ? 'table--showColors' : ''}>
         {
-        users.map((user, index) => {
-          const bgColor = index % 2 === 0 ? '#333' : '#555'
-          const color = showColors ? bgColor : 'transparent'
+        users.map((user) => {
           return (
-            <tr key={user.email} style={{backgroundColor: color}}>
+            <tr key={user.email}>
               <th>
                 <img src={user.picture.thumbnail} />
               </th>
