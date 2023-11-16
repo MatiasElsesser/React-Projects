@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
-import { type User } from './types'
+import { type User, SortBy } from './types.d'
 import { UsersList } from './components/UsersList'
 
 const END_POINT = 'https://randomuser.me/api/?results=100'
@@ -8,7 +8,7 @@ const END_POINT = 'https://randomuser.me/api/?results=100'
 function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
-  const [sortByCountry, setSortByCountry] = useState(false)
+  const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
   const [filterCountry, setFilterCountry] = useState<string | null>(null)
 
   // useRef guarda un valor que se comparte entre renderizados
@@ -20,7 +20,8 @@ function App () {
     setShowColors(!showColors)
   }
   const toggleSortByCountry = () => {
-    setSortByCountry(prevState => !prevState)
+    const newSortingValue = sorting === SortBy.NONE ? SortBy.COUNTRY : SortBy.NONE
+    setSorting(newSortingValue)
   }
 
   const handleDelete = (email: string) => {
@@ -34,6 +35,10 @@ function App () {
     setUsers(originalUsers.current)
   }
 
+  const handleChangeSort = (sort: SortBy) => {
+    setSorting(sort)
+  }
+
 
   const filteredUsers = useMemo(() => {
     return filterCountry !== null && filterCountry.length > 0
@@ -45,13 +50,22 @@ function App () {
 
     // con useMemo le decimos que el valor de la constante sortedUsers no lo vuelva a calcular entre renderizados a menos que cambie filteredUsers o sortByCountry
     const sortedUsers = useMemo(() => {
+
+      if (sorting === SortBy.NONE) return filteredUsers
+
+      const compareProperties: Record<string, (user: User) => any> = {
+        [SortBy.COUNTRY]: user => user.location.country,
+        [SortBy.NAME]: user => user.name.first,
+        [SortBy.LAST]: user => user.name.last
+      }
+
       // toSorted no muta el array original, por ende no muta el estado, en caso de usar sort() hacerlo asi: [... state].sort()
-      return sortByCountry 
-        ? filteredUsers.toSorted(
-            (a, b) => a.location.country.localeCompare(b.location.country)
-          )
-        : filteredUsers
-    }, [filteredUsers, sortByCountry])
+      return filteredUsers.toSorted((a, b) => {
+        const extractProperty = compareProperties[sorting]
+        return extractProperty(a).localeCompare(extractProperty(b))
+      })
+
+    }, [filteredUsers, sorting])
 
   useEffect(() => {
     fetch(END_POINT)
@@ -74,7 +88,7 @@ function App () {
           Colorear filas
         </button>
         <button onClick={toggleSortByCountry}>
-          {sortByCountry ? 'Ordenar por defecto' : 'Ordenar por país'}
+          {sorting === SortBy.COUNTRY? 'Ordenar por defecto' : 'Ordenar por país'}
         </button>
         <button onClick={handleReset}>
           Resetear usuarios
@@ -90,7 +104,8 @@ function App () {
         <UsersList
           users={sortedUsers} 
           showColors={showColors}
-          handleDelete={handleDelete}/>
+          handleDelete={handleDelete}
+          changeSorting={handleChangeSort}/>
       </main>
     </div>
   )

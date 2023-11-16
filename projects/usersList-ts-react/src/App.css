@@ -11,13 +11,16 @@ header {
   gap: 25px;
 }
 
-.table--showColors tr:nth-child(2n) {
+.table--showColors tr:nth-child(odd) {
   background: #333;
 }
-.table--showColors tr:nth-child(2n + 1) {
+.table--showColors tr:nth-child(even) {
   background: #666;
 }
 
+.pointer {
+  cursor: pointer;
+}
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
