@@ -3,7 +3,7 @@ import './App.css'
 import { type User, SortBy } from './types.d'
 import { UsersList } from './components/UsersList'
 
-const END_POINT = 'https://randomuser.me/api/?results=100'
+const END_POINT = 'https://randomuser.me/api/?results=10'
 
 function App () {
   const [users, setUsers] = useState<User[]>([])
@@ -15,6 +15,9 @@ function App () {
   // pero que al cambiar no vuelva a renderizar el componente
   // useReff si cambia el componente no se vuelve a renderizar, y para cambiarlo tenemos que acceder a el a travez del .current
   const originalUsers = useRef<User[]>([])
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   const toggleColor = () => {
     setShowColors(!showColors)
@@ -68,14 +71,22 @@ function App () {
     }, [filteredUsers, sorting])
 
   useEffect(() => {
+    setLoading(true)
     fetch(END_POINT)
-      .then(data => data.json())
+      .then(data => {
+        if (!data.ok) throw new Error('Error en la peticion')
+        return data.json()
+      })
       .then(res =>{
         setUsers(res.results)
         originalUsers.current = res.results
       })
       .catch(err => {
         console.error(err)
+        setError(true)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }, [])
 
@@ -83,7 +94,7 @@ function App () {
     <div>
       <h1>Prueba técnica</h1>
       <header>
-        <p>Usuarios: {users.length}</p>
+        <p className='usersBadge'>Usuarios: {users.length}</p>
         <button onClick={toggleColor}>
           Colorear filas
         </button>
@@ -101,11 +112,17 @@ function App () {
       </header>
 
       <main>
-        <UsersList
+        {loading && <p>Cargando ...</p>}
+
+        {!loading && error && <p> Ha ocurrido un error</p>}
+
+        {!loading && !error && users.length === 0 && <p>No hay resultados que mostrar</p>}
+
+        {!loading && !error && users.length > 0 &&         <UsersList
           users={sortedUsers} 
           showColors={showColors}
           handleDelete={handleDelete}
-          changeSorting={handleChangeSort}/>
+          changeSorting={handleChangeSort}/>}
       </main>
     </div>
   )
