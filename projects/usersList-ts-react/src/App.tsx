@@ -3,8 +3,6 @@ import './App.css'
 import { type User, SortBy } from './types.d'
 import { UsersList } from './components/UsersList'
 
-const END_POINT = 'https://randomuser.me/api/?results=10'
-
 function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
@@ -18,6 +16,7 @@ function App () {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const toggleColor = () => {
     setShowColors(!showColors)
@@ -72,14 +71,17 @@ function App () {
 
   useEffect(() => {
     setLoading(true)
-    fetch(END_POINT)
+    fetch(`https://randomuser.me/api/?results=10&seed=matielsesser&page=${currentPage}`)
       .then(data => {
         if (!data.ok) throw new Error('Error en la peticion')
         return data.json()
       })
       .then(res =>{
-        setUsers(res.results)
-        originalUsers.current = res.results
+        setUsers(prevUsers =>  {
+          const newUsers = prevUsers.concat(res.results)
+          originalUsers.current = newUsers
+          return newUsers
+        })
       })
       .catch(err => {
         console.error(err)
@@ -88,7 +90,7 @@ function App () {
       .finally(() => {
         setLoading(false)
       })
-  }, [])
+  }, [currentPage])
 
   return (
     <div>
@@ -112,17 +114,24 @@ function App () {
       </header>
 
       <main>
+        { users.length > 0 &&
+          <UsersList
+            users={sortedUsers} 
+            showColors={showColors}
+            handleDelete={handleDelete}
+            changeSorting={handleChangeSort}/>
+        }
+
         {loading && <p>Cargando ...</p>}
 
         {!loading && error && <p> Ha ocurrido un error</p>}
 
         {!loading && !error && users.length === 0 && <p>No hay resultados que mostrar</p>}
 
-        {!loading && !error && users.length > 0 &&         <UsersList
-          users={sortedUsers} 
-          showColors={showColors}
-          handleDelete={handleDelete}
-          changeSorting={handleChangeSort}/>}
+
+        { !loading && !error &&
+          <button onClick={() => setCurrentPage(currentPage + 1)}>Cargar mas resultados</button>
+        }
       </main>
     </div>
   )
