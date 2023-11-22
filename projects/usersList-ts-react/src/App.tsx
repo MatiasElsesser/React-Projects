@@ -124,9 +124,9 @@ function App () {
 
         {loading && <p>Cargando ...</p>}
 
-        {!loading && error && <p> Ha ocurrido un error</p>}
+        { error && <p> Ha ocurrido un error</p>}
 
-        {!loading && !error && users.length === 0 && <p>No hay resultados que mostrar</p>}
+        {!error && users.length === 0 && <p>No hay resultados que mostrar</p>}
 
 
         { !loading && !error &&
