@@ -69,6 +69,11 @@ function App () {
 
     }, [filteredUsers, sorting])
 
+
+    const regresarArriba = () => {
+      document.documentElement.scrollTop = 0
+    }
+
   useEffect(() => {
     setLoading(true)
     fetch(`https://randomuser.me/api/?results=10&seed=matielsesser&page=${currentPage}`)
@@ -94,7 +99,7 @@ function App () {
 
   return (
     <div>
-      <h1>Prueba técnica</h1>
+      <h1 id='headTitle'>Prueba técnica</h1>
       <header>
         <p className='usersBadge'>Usuarios: {users.length}</p>
         <button onClick={toggleColor}>
@@ -131,6 +136,17 @@ function App () {
 
         { !loading && !error &&
           <button onClick={() => setCurrentPage(currentPage + 1)}>Cargar mas resultados</button>
+        }
+        {
+          document.documentElement.scrollTop > 20 
+          && 
+          <button 
+          onClick={regresarArriba}
+          className='btnUp'>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
+          </svg>
+        </button>
         }
       </main>
     </div>

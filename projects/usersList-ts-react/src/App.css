@@ -26,3 +26,19 @@ header {
     animation: logo-spin infinite 20s linear;
   }
 }
+
+.btnUp {
+  width: 40px;
+  padding: 5px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+svg {
+  width: 20px;
+}
