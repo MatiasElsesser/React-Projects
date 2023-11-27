@@ -3,11 +3,21 @@ import './App.css'
 import { type User, SortBy } from './types.d'
 import { UsersList } from './components/UsersList'
 
+const fetchUsers = (page: number) => {
+  return fetch(`https://randomuser.me/api/?results=10&seed=matielsesser&page=${page}`)
+    .then(data => {
+      if (!data.ok) throw new Error('Error en la peticion')
+      return data.json()
+    })
+    .then(res => res.results)
+}
+
 function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
   const [filterCountry, setFilterCountry] = useState<string | null>(null)
+  const [showBtn, setShowBtn] = useState(false)
 
   // useRef guarda un valor que se comparte entre renderizados
   // pero que al cambiar no vuelva a renderizar el componente
@@ -71,19 +81,36 @@ function App () {
 
 
     const regresarArriba = () => {
-      document.documentElement.scrollTop = 0
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
     }
+
+    const handleScroll = () => {
+      if(document.documentElement.scrollTop > 20) {
+        setShowBtn(true)
+      } else {
+        setShowBtn(false)
+      }
+    }
+
+    useEffect(() =>{
+      window.addEventListener('scroll', handleScroll)
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll)
+      }
+    },[])
 
   useEffect(() => {
     setLoading(true)
-    fetch(`https://randomuser.me/api/?results=10&seed=matielsesser&page=${currentPage}`)
-      .then(data => {
-        if (!data.ok) throw new Error('Error en la peticion')
-        return data.json()
-      })
-      .then(res =>{
+    setError(false)
+
+    fetchUsers(currentPage)
+      .then(users => {
         setUsers(prevUsers =>  {
-          const newUsers = prevUsers.concat(res.results)
+          const newUsers = prevUsers.concat(users)
           originalUsers.current = newUsers
           return newUsers
         })
@@ -138,7 +165,7 @@ function App () {
           <button onClick={() => setCurrentPage(currentPage + 1)}>Cargar mas resultados</button>
         }
         {
-          document.documentElement.scrollTop > 20 
+          showBtn 
           && 
           <button 
           onClick={regresarArriba}
