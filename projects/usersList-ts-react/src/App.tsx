@@ -11,28 +11,29 @@ const fetchUsers = ({pageParam = 1}: { pageParam: number}) => {
       return data.json()
     })
     .then(res => { 
-      const nextCursor = Number(res.info.page) +1
+      const currentPage = Number(res.info.page)
+      const nextCursor = currentPage > 10 ? undefined : currentPage + 1
       return {
         users: res.results,
         nextCursor
       }
     })
 }
-type PropsQuery = {
+interface PropsQuery  {
   users: User[]
-  nextCursor: number
+  nextCursor?: number
 }
 function App () {
   const{ isLoading, isError, data, refetch, fetchNextPage } = useInfiniteQuery<PropsQuery>({
     queryKey: ['users'],
-    queryFn:  fetchUsers,
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {lastPage.nextCursor}
+    queryFn: fetchUsers,
+    getNextPageParam: (lastPage, _pages) => {
+      console.log(lastPage)
+      lastPage.nextCursor}
   })
 
 
   const users: User[] = data?.pages?.flatMap(page => page.users) ?? []
-
 
   const [showColors, setShowColors] = useState(false)
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
@@ -157,8 +158,8 @@ function App () {
         {!isLoading && !isError && users.length === 0 && <p>No hay resultados que mostrar</p>}
 
 
-        { !isLoading && !isError &&
-          <button onClick={() => {void fetchNextPage()}}>Cargar mas resultados</button>
+        { !isLoading && !isError && 
+          <button onClick={() => fetchNextPage()}>Cargar mas resultados</button>
         }
         {
           showBtn 
