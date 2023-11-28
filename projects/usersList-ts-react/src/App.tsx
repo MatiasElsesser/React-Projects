@@ -1,19 +1,39 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo,  useState } from 'react'
 import './App.css'
 import { type User, SortBy } from './types.d'
 import { UsersList } from './components/UsersList'
+import {  useInfiniteQuery } from '@tanstack/react-query'
 
-const fetchUsers = (page: number) => {
-  return fetch(`https://randomuser.me/api/?results=10&seed=matielsesser&page=${page}`)
+const fetchUsers = ({pageParam = 1}: { pageParam: number}) => {
+  return fetch(`https://randomuser.me/api/?results=10&seed=matielsesser&page=${pageParam}`)
     .then(data => {
       if (!data.ok) throw new Error('Error en la peticion')
       return data.json()
     })
-    .then(res => res.results)
+    .then(res => { 
+      const nextCursor = Number(res.info.page) +1
+      return {
+        users: res.results,
+        nextCursor
+      }
+    })
 }
-
+type PropsQuery = {
+  users: User[]
+  nextCursor: number
+}
 function App () {
-  const [users, setUsers] = useState<User[]>([])
+  const{ isLoading, isError, data, refetch, fetchNextPage } = useInfiniteQuery<PropsQuery>({
+    queryKey: ['users'],
+    queryFn:  fetchUsers,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {lastPage.nextCursor}
+  })
+
+
+  const users: User[] = data?.pages?.flatMap(page => page.users) ?? []
+
+
   const [showColors, setShowColors] = useState(false)
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
   const [filterCountry, setFilterCountry] = useState<string | null>(null)
@@ -22,11 +42,7 @@ function App () {
   // useRef guarda un valor que se comparte entre renderizados
   // pero que al cambiar no vuelva a renderizar el componente
   // useReff si cambia el componente no se vuelve a renderizar, y para cambiarlo tenemos que acceder a el a travez del .current
-  const originalUsers = useRef<User[]>([])
-
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
+  // const originalUsers = useRef<User[]>([])
 
   const toggleColor = () => {
     setShowColors(!showColors)
@@ -37,14 +53,14 @@ function App () {
   }
 
   const handleDelete = (email: string) => {
-    const filteredUsers = users.filter((user) => {
-      return user.email !== email
-    })
-    setUsers(filteredUsers)
+    // const filteredUsers = users.filter((user) => {
+    //   return user.email !== email
+    // })
+    // setUsers(filteredUsers)
   }
 
   const handleReset = () => {
-    setUsers(originalUsers.current)
+    refetch()
   }
 
   const handleChangeSort = (sort: SortBy) => {
@@ -103,26 +119,6 @@ function App () {
       }
     },[])
 
-  useEffect(() => {
-    setLoading(true)
-    setError(false)
-
-    fetchUsers(currentPage)
-      .then(users => {
-        setUsers(prevUsers =>  {
-          const newUsers = prevUsers.concat(users)
-          originalUsers.current = newUsers
-          return newUsers
-        })
-      })
-      .catch(err => {
-        console.error(err)
-        setError(true)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [currentPage])
 
   return (
     <div>
@@ -154,15 +150,15 @@ function App () {
             changeSorting={handleChangeSort}/>
         }
 
-        {loading && <p>Cargando ...</p>}
+        {isLoading && <p>Cargando ...</p>}
 
-        { error && <p> Ha ocurrido un error</p>}
+        { isError && <p> Ha ocurrido un error</p>}
 
-        {!error && users.length === 0 && <p>No hay resultados que mostrar</p>}
+        {!isLoading && !isError && users.length === 0 && <p>No hay resultados que mostrar</p>}
 
 
-        { !loading && !error &&
-          <button onClick={() => setCurrentPage(currentPage + 1)}>Cargar mas resultados</button>
+        { !isLoading && !isError &&
+          <button onClick={() => {void fetchNextPage()}}>Cargar mas resultados</button>
         }
         {
           showBtn 
