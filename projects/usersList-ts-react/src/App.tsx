@@ -2,38 +2,16 @@ import { useEffect, useMemo,  useState } from 'react'
 import './App.css'
 import { type User, SortBy } from './types.d'
 import { UsersList } from './components/UsersList'
-import {  useInfiniteQuery } from '@tanstack/react-query'
+import { useUsers } from './hooks/useUsers'
 
-const fetchUsers = ({pageParam = 1}: { pageParam: number}) => {
-  return fetch(`https://randomuser.me/api/?results=10&seed=matielsesser&page=${pageParam}`)
-    .then(data => {
-      if (!data.ok) throw new Error('Error en la peticion')
-      return data.json()
-    })
-    .then(res => { 
-      const currentPage = Number(res.info.page)
-      const nextCursor = currentPage > 10 ? undefined : currentPage + 1
-      return {
-        users: res.results,
-        nextCursor
-      }
-    })
-}
-interface PropsQuery  {
-  users: User[]
-  nextCursor?: number
-}
 function App () {
-  const{ isLoading, isError, data, refetch, fetchNextPage } = useInfiniteQuery<PropsQuery>({
-    queryKey: ['users'],
-    queryFn: fetchUsers,
-    getNextPageParam: (lastPage, _pages) => {
-      console.log(lastPage)
-      lastPage.nextCursor}
-  })
-
-
-  const users: User[] = data?.pages?.flatMap(page => page.users) ?? []
+  const {
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    isLoading,
+    refetch,
+    users} = useUsers()
 
   const [showColors, setShowColors] = useState(false)
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
@@ -158,9 +136,11 @@ function App () {
         {!isLoading && !isError && users.length === 0 && <p>No hay resultados que mostrar</p>}
 
 
-        { !isLoading && !isError && 
+        { !isLoading && !isError && hasNextPage == true  &&
           <button onClick={() => fetchNextPage()}>Cargar mas resultados</button>
         }
+        {!isLoading && !isError &&  hasNextPage == false && <p>No hay mas resultados</p>}
+        
         {
           showBtn 
           && 
