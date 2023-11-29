@@ -35,7 +35,6 @@ function App () {
     // const filteredUsers = users.filter((user) => {
     //   return user.email !== email
     // })
-    // setUsers(filteredUsers)
   }
 
   const handleReset = () => {
